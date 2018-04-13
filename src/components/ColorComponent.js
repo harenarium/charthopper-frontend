@@ -90,7 +90,6 @@ class ColorComponent extends Component{
 	}
 
   setColor = (event) => {
-    console.log('hello')
     let name = event.target.name
     let value = parseInt(event.target.value)
     if(name === 'alpha' && value > 100){
@@ -104,10 +103,10 @@ class ColorComponent extends Component{
     if (typeof value === "number"){
       this.setState({[name]: value})
     }
+    this.props.changeColors(this.state.red, this.state.green, this.state.blue, this.state.alpha, this.props.id)
   }
 
   render() {
-    console.log(this.state)
     const { isDragging, connectDragSource } = this.props
 		const { name } = this.props
 		const opacity = isDragging ? 0.4 : 1

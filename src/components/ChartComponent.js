@@ -51,13 +51,13 @@ class ChartComponent extends Component{
     name: PropTypes.string.isRequired,
   }
 
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
 
     this.state={
       type: "line",
-      backgroundColor: "rgb(255, 255, 255, 0)",
-      borderColor: "rgb(0, 0, 0)",
+      backgroundColor: "rgba(255, 255, 255, 0)",
+      borderColor: `rgba(${props.color.red},${props.color.green},${props.color.blue},${props.color.alpha})`,
       borderWidth: 1,
       label: "",
       labels: years,
@@ -136,6 +136,21 @@ class ChartComponent extends Component{
     let chart = new Chart(ctx, options);
   }
 
+	changeColor = () => {
+		this.setState({
+			backgroundColor: "rgba(100, 200, 50, 100)"
+		}, () => {
+			this.initializeChart(this.setChartParams());
+		})
+	}
+
+	componentWillReceiveProps(nextProps){
+    // SET THE STATE HERE WILL THE PROPS AND THEN CALLBACK FUNCTION WITH THE INITIALIZECHART AND SETCHARTPARAMS
+		console.log(nextProps)
+		// this.initializeChart(this.setChartParams());
+	}
+
+
   render() {
     const { isDragging, connectDragSource } = this.props
 		const { name } = this.props
@@ -144,6 +159,7 @@ class ChartComponent extends Component{
     return connectDragSource(
       <div onDragStart={this.getOgMousePos} onDragEnd={this.getMousePos} style={{ ...style, opacity, width:"25%" }} >
         <canvas ref="chart" name={name}/>
+				<button onClick={this.changeColor}></button>
       </div>
     )
   }
