@@ -1,4 +1,8 @@
 export default {
 	BOX: 'box',
-  CHART: 'chart'
+  CHART: 'chart',
+	COLOR: 'color',
+	TOOLBAR: 'toolbar',
+	CHARTBUTTON: 'chartbutton',
+	COLORBUTTON: 'colorbutton'
 }
