@@ -3,9 +3,17 @@ import './App.css';
 import Container from './components/Container'
 
 class App extends Component {
+  constructor(){
+    super()
+    // this.state = {
+    //   mouseX: '0px',
+    //   mouseY: '0px'
+    // }
+  }
+
   render() {
     return (
-      <div className="App">
+      <div  className="App">
         <Container />
       </div>
     );

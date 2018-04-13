@@ -10,16 +10,16 @@ export default class Container extends Component {
 		return (
 			<DragDropContextProvider backend={HTML5Backend}>
 				<div>
-					<div style={{ overflow: 'hidden', clear: 'both' }}>
+					{/* <div style={{ overflow: 'hidden', clear: 'both' }}>
 						<Dustbin />
 					</div>
 					<div style={{ overflow: 'hidden', clear: 'both' }}>
 						<Box name="Glass" />
 						<Box name="Banana" />
 						<Box name="Paper" />
-					</div>
+					</div> */}
           <div style={{ overflow: 'hidden', clear: 'both' }}>
-            <ChartComponent name="Chart"/>
+            <ChartComponent name="Chart" />
           </div>
 				</div>
 			</DragDropContextProvider>

@@ -6,14 +6,20 @@ import { DragSource } from 'react-dnd'
 import ItemTypes from './ItemTypes'
 
 const style = {
-	border: '1px dashed gray',
-	backgroundColor: 'white',
+	// border: '1px dashed gray',
+	backgroundColor: 'silver',
 	padding: '0.5rem 1rem',
 	marginRight: '1.5rem',
 	marginBottom: '1.5rem',
 	cursor: 'move',
 	float: 'left',
+	position: 'absolute',
+	top: '',
+	left: ''
 }
+
+// let xDif = 0
+// let yDif = 0
 
 const years = [1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 ]
 
@@ -21,7 +27,6 @@ const temps = [-0.19, -0.10, -0.10, -0.19, -0.28, -0.31, -0.32, -0.35, -0.18, -0
 
 const chartSource = {
 	beginDrag(props) {
-    console.log(props)
 		return {
 			name: props.name,
 		}
@@ -31,9 +36,13 @@ const chartSource = {
 		const item = monitor.getItem()
 		const dropResult = monitor.getDropResult()
 
-		if (dropResult) {
-			alert(`You dropped ${item.name} into ${dropResult.name}!`) // eslint-disable-line no-alert
-		}
+		// console.log(props.mouseX)
+		// console.log(style.right)
+		// console.log(props.mouseY)
+		// console.log(style.top)
+		// if (dropResult) {
+		// 	alert(`You dropped ${item.name} into ${dropResult.name}!`) // eslint-disable-line no-alert
+		// }
 	},
 }
 
@@ -56,9 +65,45 @@ class ChartComponent extends Component{
       label: "",
       labels: years,
       data: temps,
-      options: {}
+      options: {},
+			chartX: 0,
+			chartY: 0,
+			xDif: 0,
+			yDif: 0
     }
   }
+
+	// componentWillReceiveProps(nextProps) {
+	// 	style.top = nextProps.chartY
+	// 	style.left = nextProps.chartX
+	// }
+
+	getMousePos = (event) => {
+		console.log("clientX")
+		console.log(event.clientX)
+
+		style.left = `${event.clientX - this.state.xDif}px`
+		style.top = `${event.clientY - this.state.yDif}px`
+		this.setState({
+			chartX: event.clientX - this.state.xDif,
+			chartY: event.clientY - this.state.yDif
+		}, () => {
+			console.log("xDif")
+			console.log(this.state.xDif)
+			console.log("chartX")
+			console.log(this.state.chartX)
+			console.log('--------------------')
+		})
+	}
+
+	getOgMousePos = (event) => {
+		// xDif = event.clientX - this.state.chartX
+		// yDif = event.clientY - this.state.chartY
+		this.setState({
+			xDif: event.clientX - this.state.chartX,
+			yDif: event.clientY - this.state.chartY
+		})
+	}
 
   setChartParams = () => {
     const config = {
@@ -94,7 +139,7 @@ class ChartComponent extends Component{
 		const opacity = isDragging ? 0.4 : 1
 
     return connectDragSource(
-      <div style={{ ...style, opacity, width:"50%" }} >
+      <div onDragStart={this.getOgMousePos} onDragEnd={this.getMousePos} style={{ ...style, opacity, width:"50%" }} >
         <canvas ref="chart" name={name}/>
       </div>
     )
