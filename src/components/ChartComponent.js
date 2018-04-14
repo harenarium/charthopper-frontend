@@ -32,14 +32,6 @@ const chartSource = {
 	endDrag(props, monitor) {
 		const item = monitor.getItem()
 		const dropResult = monitor.getDropResult()
-
-		// console.log(props.mouseX)
-		// console.log(style.right)
-		// console.log(props.mouseY)
-		// console.log(style.top)
-		// if (dropResult) {
-		// 	alert(`You dropped ${item.name} into ${dropResult.name}!`) // eslint-disable-line no-alert
-		// }
 	},
 }
 
@@ -53,12 +45,14 @@ class ChartComponent extends Component{
 
   constructor(props){
     super(props)
+		console.log(this.props.key)
 
     this.state={
       type: "line",
-      backgroundColor: "rgba(255, 255, 255, 0)",
-      borderColor: `rgba(${props.color.red},${props.color.green},${props.color.blue},${props.color.alpha})`,
+      backgroundColor: "rgba(255, 255, 255, 0",
+      borderColor: "rgba(0, 0, 0, 1)",
       borderWidth: 1,
+			radius: 0,
       label: "",
       labels: years,
       data: temps,
@@ -76,20 +70,11 @@ class ChartComponent extends Component{
 	// }
 
 	getMousePos = (event) => {
-		console.log("clientX")
-		console.log(event.clientX)
-
 		style.left = `${event.clientX - this.state.xDif}px`
 		style.top = `${event.clientY - this.state.yDif}px`
 		this.setState({
 			chartX: event.clientX - this.state.xDif,
 			chartY: event.clientY - this.state.yDif
-		}, () => {
-			console.log("xDif")
-			console.log(this.state.xDif)
-			console.log("chartX")
-			console.log(this.state.chartX)
-			console.log('--------------------')
 		})
 	}
 
@@ -112,7 +97,8 @@ class ChartComponent extends Component{
           data: this.state.data,
           backgroundColor: this.state.backgroundColor,
           borderColor: this.state.borderColor,
-          borderWidth: this.state.borderWidth
+          borderWidth: this.state.borderWidth,
+					radius: this.state.radius
         }]
       },
       options: {}
@@ -130,7 +116,7 @@ class ChartComponent extends Component{
 		})
   }
 
-  initializeChart(options) {;
+  initializeChart(options) {
     let el = ReactDOM.findDOMNode(this.refs.chart);
     let ctx = el.getContext("2d");
     let chart = new Chart(ctx, options);
@@ -145,9 +131,9 @@ class ChartComponent extends Component{
 	}
 
 	componentWillReceiveProps(nextProps){
-    // SET THE STATE HERE WILL THE PROPS AND THEN CALLBACK FUNCTION WITH THE INITIALIZECHART AND SETCHARTPARAMS
-		console.log(nextProps)
-		// this.initializeChart(this.setChartParams());
+		this.setState({borderColor: `rgba(${nextProps.color.red},${nextProps.color.green},${nextProps.color.blue},${nextProps.color.alpha})`},  () => {
+			this.initializeChart(this.setChartParams());
+		})
 	}
 
 
@@ -158,7 +144,7 @@ class ChartComponent extends Component{
 
     return connectDragSource(
       <div onDragStart={this.getOgMousePos} onDragEnd={this.getMousePos} style={{ ...style, opacity, width:"25%" }} >
-        <canvas ref="chart" name={name}/>
+        <canvas ref='chart' name={name} />
 				<button onClick={this.changeColor}></button>
       </div>
     )

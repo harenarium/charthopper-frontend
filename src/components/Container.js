@@ -33,12 +33,13 @@ export default class Container extends Component {
 		newColorObjects.push(color)
 
 		this.setState({colorObjects: newColorObjects}, () => {
-			let index = this.state.colorObjects.length - 1
+			// let index = this.state.colorObjects.length - 1
 			let newCharts = this.state.charts.slice(0)
 			newCharts.push({
-				color: this.state.colorObjects[index],
+				// color: this.state.colorObjects[index],
+				color: color,
 				id: id,
-				key: UUID(),
+				key: newCharts.length,
 				xPos: xPos,
 				yPos: yPos
 			})
@@ -51,7 +52,7 @@ export default class Container extends Component {
 		newColors.push({
 			id: this.state.charts.slice(-1)[0].id,
 			changeColors: this.changeColors,
-			key: UUID(),
+			key: newColors.length,
 			xPos: event.clientX,
 			yPos: event.clientY,
 		})
@@ -59,25 +60,19 @@ export default class Container extends Component {
 	}
 
 	changeColors = (red, green, blue, alpha, id) => {
-		// console.log(this.state.colorObjects)
 		let color = this.state.colorObjects.find((color)=>{return color.id === id})
 		let index = this.state.colorObjects.indexOf(color)
 		let updatedColors = [...this.state.colorObjects]
-		updatedColors[index] = {red: red, green: green, blue: blue, alpha: alpha, id: id}
+		updatedColors[index] = {red: red, green: green, blue: blue, alpha: alpha/100, id: id}
 		this.setState({
 			colorObjects: updatedColors
 		})
-
-		// color.red = red
-		// color.green = green
-		// color.blue = blue
-		// color.alpha = alpha
-		// console.log(red)
 	}
 
 	render() {
 		let charts = this.state.charts.map(chart => {
-			return <ChartComponent color={chart.color} id={chart.id} key={chart.key} name="Chart" xPos={chart.xPos} yPos={chart.yPos}/>
+			let thisColor = this.state.colorObjects.find(color => {return color.id === chart.id})
+			return <ChartComponent color={thisColor} id={chart.id} key={chart.key} name="Chart" xPos={chart.xPos} yPos={chart.yPos}/>
 		})
 		let colors = this.state.colors.map(color => {
 			return <ColorComponent id={color.id} changeColors={color.changeColors} key={color.key} name="Color" xPos={color.xPos} yPos={color.yPos}/>
@@ -89,14 +84,6 @@ export default class Container extends Component {
 					<div style={{ overflow: 'hidden', clear: 'both' }}>
             <DropArea name="DropArea" />
           </div>
-					{/* <div style={{ overflow: 'hidden', clear: 'both' }}>
-						<Dustbin />
-					</div>
-					<div style={{ overflow: 'hidden', clear: 'both' }}>
-						<Box name="Glass" />
-						<Box name="Banana" />
-						<Box name="Paper" />
-					</div> */}
 					<div style={{ overflow: 'hidden', clear: 'both' }}>
             <ToolBar renderChart={this.renderChart} renderColor={this.renderColor} name="ToolBar" />
           </div>

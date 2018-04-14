@@ -29,15 +29,7 @@ const colorSource = {
 	endDrag(props, monitor) {
 		const item = monitor.getItem()
 		const dropResult = monitor.getDropResult()
-
-		// console.log(props.mouseX)
-		// console.log(style.right)
-		// console.log(props.mouseY)
-		// console.log(style.top)
-		// if (dropResult) {
-		// 	alert(`You dropped ${item.name} into ${dropResult.name}!`) // eslint-disable-line no-alert
-		// }
-	},
+	}
 }
 
 class ColorComponent extends Component{
@@ -101,9 +93,8 @@ class ColorComponent extends Component{
       value = 0
     }
     if (typeof value === "number"){
-      this.setState({[name]: value})
+      this.setState({[name]: value}, () => { this.props.changeColors(this.state.red, this.state.green, this.state.blue, this.state.alpha, this.props.id) })
     }
-    this.props.changeColors(this.state.red, this.state.green, this.state.blue, this.state.alpha, this.props.id)
   }
 
   render() {
@@ -113,16 +104,16 @@ class ColorComponent extends Component{
 
     return connectDragSource(
         <div onDragStart={this.getOgMousePos} onDragEnd={this.getMousePos} style={{ ...style, opacity}} >
-          <div>
-            Color
+          <div style={{padding: '10px'}}>
+            Line Color
           </div>
           <div>
             <input onChange={this.setColor} value={this.state.red} name="red" type="number" placeholder="Red Value" min={0} max={255}/>
             <input onChange={this.setColor} value={this.state.green} name="green" type="number" placeholder="Green Value" min={0} max={255}/>
             <input onChange={this.setColor} value={this.state.blue} name="blue" type="number" placeholder="Blue Value" min={0} max={255}/>
             <input onChange={this.setColor} value={this.state.alpha} name="alpha" type="number" placeholder="Alpha" min={0} max={100}/>
-          </div>
-          <div style={{backgroundColor: `rgba(${this.state.red}, ${this.state.green}, ${this.state.blue}, ${this.state.alpha/100})`, height: '100px', width: '100px'}}>
+          </div><br></br>
+          <div style={{backgroundColor: `rgba(${this.state.red}, ${this.state.green}, ${this.state.blue}, ${this.state.alpha/100})`, height: '100px', width: '100px', margin: 'auto'}}>
           </div>
         </div>
     )
