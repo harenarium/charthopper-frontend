@@ -2,15 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { DragSource } from 'react-dnd'
 import ItemTypes from './ItemTypes'
-import ChartButton from './ChartButton'
-import ColorButton from './ColorButton'
-import FillColorButton from './FillColorButton'
 
 const style = {
-  position: 'fixed',
-  height:'100%',
-  width: '10%',
-	backgroundColor: 'black',
+	// border: '1px dashed gray',
+	backgroundColor: 'white',
 	padding: '0.5rem 1rem',
 	marginRight: '1.5rem',
 	marginBottom: '1.5rem',
@@ -18,7 +13,7 @@ const style = {
 	float: 'left',
 }
 
-const toolbarSource = {
+const colorbuttonSource = {
 	beginDrag(props) {
 		return {
 			name: props.name,
@@ -35,7 +30,7 @@ const toolbarSource = {
 	},
 }
 
-class ToolBar extends Component {
+class FillColorButton extends Component {
 	static propTypes = {
 		connectDragSource: PropTypes.func.isRequired,
 		isDragging: PropTypes.bool.isRequired,
@@ -48,15 +43,13 @@ class ToolBar extends Component {
 		const opacity = isDragging ? 0.4 : 1
 
 		return connectDragSource(
-      <div style={{ ...style, opacity }}>
-        <ChartButton renderChart={this.props.renderChart} name="Add Chart"/>
-        <ColorButton renderColor={this.props.renderColor} name="Line Color"/>
-        <FillColorButton renderFillColor={this.props.renderFillColor} name="Fill Color"/>
+      <div onDragEnd={this.props.renderFillColor} style={{ ...style, opacity }}>
+        {name}
       </div>)
 	}
 }
 
-export default DragSource(ItemTypes.TOOLBAR, toolbarSource, (connect, monitor) => ({
+export default DragSource(ItemTypes.FILLCOLORBUTTON, colorbuttonSource, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging(),
-}))(ToolBar);
+}))(FillColorButton);

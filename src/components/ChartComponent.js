@@ -49,7 +49,7 @@ class ChartComponent extends Component{
 
     this.state={
       type: "line",
-      backgroundColor: "rgba(255, 255, 255, 0",
+      backgroundColor: "rgba(255, 255, 255, 0)",
       borderColor: "rgba(0, 0, 0, 1)",
       borderWidth: 1,
 			radius: 0,
@@ -64,11 +64,6 @@ class ChartComponent extends Component{
     }
   }
 
-	// componentWillReceiveProps(nextProps) {
-	// 	style.top = nextProps.chartY
-	// 	style.left = nextProps.chartX
-	// }
-
 	getMousePos = (event) => {
 		style.left = `${event.clientX - this.state.xDif}px`
 		style.top = `${event.clientY - this.state.yDif}px`
@@ -79,8 +74,6 @@ class ChartComponent extends Component{
 	}
 
 	getOgMousePos = (event) => {
-		// xDif = event.clientX - this.state.chartX
-		// yDif = event.clientY - this.state.chartY
 		this.setState({
 			xDif: event.clientX - this.state.chartX,
 			yDif: event.clientY - this.state.chartY
@@ -122,18 +115,19 @@ class ChartComponent extends Component{
     let chart = new Chart(ctx, options);
   }
 
-	changeColor = () => {
-		this.setState({
-			backgroundColor: "rgba(100, 200, 50, 100)"
-		}, () => {
-			this.initializeChart(this.setChartParams());
-		})
-	}
-
 	componentWillReceiveProps(nextProps){
-		this.setState({borderColor: `rgba(${nextProps.color.red},${nextProps.color.green},${nextProps.color.blue},${nextProps.color.alpha})`},  () => {
-			this.initializeChart(this.setChartParams());
-		})
+		console.log(nextProps)
+		if(`rgba(${nextProps.fillColor.red},${nextProps.fillColor.green},${nextProps.fillColor.blue},${nextProps.fillColor.alpha})` !== this.state.backgroundColor){
+			console.log(nextProps.fillColor.red)
+			console.log(this.state.backgroundColor.red)
+			this.setState({backgroundColor: `rgba(${nextProps.fillColor.red},${nextProps.fillColor.green},${nextProps.fillColor.blue},${nextProps.fillColor.alpha})`},  () => {
+				this.initializeChart(this.setChartParams());
+			})
+		} else if(`rgba(${nextProps.color.red},${nextProps.color.green},${nextProps.color.blue},${nextProps.color.alpha})` !== this.state.borderColor){
+			this.setState({borderColor: `rgba(${nextProps.color.red},${nextProps.color.green},${nextProps.color.blue},${nextProps.color.alpha})`},  () => {
+				this.initializeChart(this.setChartParams());
+			})
+		}
 	}
 
 
@@ -145,7 +139,6 @@ class ChartComponent extends Component{
     return connectDragSource(
       <div onDragStart={this.getOgMousePos} onDragEnd={this.getMousePos} style={{ ...style, opacity, width:"25%" }} >
         <canvas ref='chart' name={name} />
-				<button onClick={this.changeColor}></button>
       </div>
     )
   }

@@ -32,7 +32,7 @@ const colorSource = {
 	}
 }
 
-class ColorComponent extends Component{
+class FillColorComponent extends Component{
 
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
@@ -94,6 +94,7 @@ class ColorComponent extends Component{
       value = 0
     }
     if (typeof value === "number"){
+      console.log(this.props)
       this.setState({[name]: value}, () => { this.props.changeColors(this.state.red, this.state.green, this.state.blue, this.state.alpha, this.props.id) })
     }
   }
@@ -106,7 +107,7 @@ class ColorComponent extends Component{
     return connectDragSource(
         <div onDragStart={this.getOgMousePos} onDragEnd={this.getMousePos} style={{ ...style, opacity}} >
           <div style={{padding: '10px'}}>
-            Line Color
+            Fill Color
           </div>
           <div>
             <input onChange={this.setColor} value={this.state.red} name="red" type="number" placeholder="Red Value" min={0} max={255}/>
@@ -121,7 +122,7 @@ class ColorComponent extends Component{
   }
 }
 
-export default DragSource(ItemTypes.COLOR, colorSource, (connect, monitor) => ({
+export default DragSource(ItemTypes.FILLCOLOR, colorSource, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging(),
-}))(ColorComponent);
+}))(FillColorComponent);
